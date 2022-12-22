@@ -21,58 +21,35 @@
 </head>
 <body>
 <div class="p-3">
-    <h2 class="text-center fw-bold">Blog list</h2>
+    <h2 class="text-center fw-bold">Category list</h2>
 
     <nav class="navbar navbar-expand-lg py-0 my-0">
         <div class="container-fluid">
-            <a href="/blog/create">
+            <a href="/category/create">
                 <button class="btn btn-success btn-outline-secondary btn-sm">
                     <span class="fa-solid fa-person-circle-plus text-light h5 my-auto me-1"></span>
                     <span class="text-light"> Add new </span>
                 </button>
             </a>
-
-            <a href="/category/list">
-                <button class="btn btn-success btn-outline-secondary btn-sm">
-                    <span class="fa-solid fa-person-circle-plus text-light h5 my-auto me-1"></span>
-                    <span class="text-light"> Category </span>
-                </button>
-            </a>
-
-            <form class="d-flex my-2" role="search" action="/blog/list">
-                <<input class="form-control me-2" type="text" placeholder="Input search title" th:value="${title}"
-                        aria-label="Search" name="title" style="width: 210%">
-                <button class="btn btn-outline-success" type="submit" name="action" value="search">
-                    <i class="fa-solid fa-magnifying-glass"></i></button>
-            </form>
         </div>
     </nav>
 
-    <table id="blogTable" class="table table-light table-striped table-bordered">
+    <table id="categoryTable" class="table table-light table-striped table-bordered">
         <thead>
         <tr class="table-dark text-light">
             <th>Id</th>
-            <th>Title</th>
-            <th>Writer</th>
-            <th>Content</th>
-            <th>Date Create</th>
-            <th>Category</th>
+            <th>Name Category</th>
             <th class="text-center">Edit</th>
             <th class="text-center">Delete</th>
-            <th class="text-center">View</th>
         </tr>
         </thead>
 
         <tbody>
-        <tr th:each="blog,index : ${blogList}">
-            <td th:text="${blog.id}"></td>
-            <td th:text="${blog.title}"></td>
-            <td th:text="${blog.writer}"></td>
-            <td th:text="${blog.content}"></td>
-            <td th:text="${blog.dateCreate}"></td>
-            <td th:text="${blog.category.categoryName}"></td>
+        <tr th:each="category,index : ${categoryList}">
+            <td th:text="${category.id}"></td>
+            <td th:text="${category.categoryName}"></td>
             <td class="text-center">
-                <a th:href="@{/blog/edit/{id}(id=${blog.id})}">
+                <a th:href="@{/category/edit/{id}(id=${category.id})}">
                     <button class="btn btn-primary btn-outline-secondary btn-sm">
                         <span class="fa-solid fa-user-pen text-light h6 m-auto px-2"></span>
                     </button>
@@ -80,29 +57,28 @@
             </td>
             <td class="text-center">
                 <a data-bs-toggle="modal"
-                   data-bs-target="#deleteBlog"
-                   th:attr="onclick=|deleteBlog('${blog.getId()}','${blog.getTitle()}')|" >
+                   data-bs-target="#deleteCategory"
+                   th:attr="onclick=|deleteCategory('${category.getId()}','${category.getCategoryName()}')|" >
                     <button class="btn btn-danger btn-outline-secondary btn-sm">
                         <span class="fa-solid fa-person-circle-minus text-light h6 m-auto px-2"></span>
                     </button>
                 </a>
             </td>
-            <td><a th:href="@{/blog/view/__${blog.id}__}">view</a></td>
         </tr>
         </tbody>
     </table>
 
     <div style="text-align: center">
 
-        <a th:href="@{/blog/list/(page = ${blogList.number -1 })}"
-           th:if="${blogList.hasPrevious()}">Previous</a>
-        <span th:text="${blogList.number+1}"></span>/
-        <span th:text="${blogList.totalPages}"></span>
-        <a th:href="@{/blog/list/(page = ${blogList.number +1})}"
-           th:if="${blogList.hasNext()}">Next</a>
+        <a th:href="@{/category/list/(page = ${categoryList.number -1 })}"
+           th:if="${categoryList.hasPrevious()}">Previous</a>
+        <span th:text="${categoryList.number+1}"></span>/
+        <span th:text="${categoryList.totalPages}"></span>
+        <a th:href="@{/category/list/(page = ${categoryList.number +1})}"
+           th:if="${categoryList.hasNext()}">Next</a>
     </div>
 
-    <div class="modal fade" id="deleteBlog" tabindex="-1" aria-labelledby="exampleModalLabel1"
+    <div class="modal fade" id="deleteCategory" tabindex="-1" aria-labelledby="exampleModalLabel1"
          aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content modalCSS">
@@ -111,9 +87,9 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
 
-                <form th:action="@{/blog/delete}">
+                <form th:action="@{/category/delete}">
                     <div class="modal-body">
-                        <span class="h6">Blog:</span><strong id="nameDelete" class="text-danger ps-2"></strong>
+                        <span class="h6">Category:</span><strong id="nameDelete" class="text-danger ps-2"></strong>
                         <input type="hidden" name="idDelete" id="idDelete" readonly/>
                     </div>
 
@@ -127,7 +103,7 @@
     </div>
 </div>
 <script>
-    function deleteBlog(id, name) {
+    function deleteCategory(id, name) {
         document.getElementById("idDelete").value = id;
         document.getElementById("nameDelete").innerText = name;
     }

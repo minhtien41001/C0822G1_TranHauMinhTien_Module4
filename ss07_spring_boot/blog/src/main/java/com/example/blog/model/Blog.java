@@ -17,7 +17,7 @@ public class Blog {
     @DateTimeFormat(pattern = "dd/mm/yyyy")
     private Date dateCreate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id",referencedColumnName = "id")
     private Category category;
 

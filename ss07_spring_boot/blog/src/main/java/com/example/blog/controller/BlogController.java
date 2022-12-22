@@ -25,15 +25,15 @@ public class BlogController {
                            @RequestParam(value = "title",defaultValue = "")String title,
                            Model model){
         model.addAttribute("blogList",iBlogService.searchByTitle(title, pageable));
-        model.addAttribute("categoryList",iCategoryService.findAll());
+        model.addAttribute("categoryList",iCategoryService.findAll(pageable));
         model.addAttribute("title",title);
         return "blog/list";
     }
 
     @GetMapping("/create")
-    public String createBlog(Model model){
+    public String createBlog(Model model,Pageable pageable){
         model.addAttribute("blog",new Blog());
-        model.addAttribute("categoryList",iCategoryService.findAll());
+        model.addAttribute("categoryList",iCategoryService.findAll(pageable));
         return "blog/create";
     }
 
@@ -45,9 +45,9 @@ public class BlogController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editBlog(@PathVariable int id,Model model){
+    public String editBlog(@PathVariable int id,Model model,Pageable pageable){
         model.addAttribute("blog",iBlogService.findById(id));
-        model.addAttribute("categoryList",iCategoryService.findAll());
+        model.addAttribute("categoryList",iCategoryService.findAll(pageable));
         return "blog/edit";
     }
 
@@ -65,9 +65,9 @@ public class BlogController {
     }
 
     @GetMapping("/view/{id}")
-    public String viewBlog(@PathVariable int id,Model model){
+    public String viewBlog(@PathVariable int id,Model model,Pageable pageable){
         model.addAttribute("blog",iBlogService.findById(id));
-        model.addAttribute("categoryList",iCategoryService.findAll());
+        model.addAttribute("categoryList",iCategoryService.findAll(pageable));
         return"blog/view";
     }
 }

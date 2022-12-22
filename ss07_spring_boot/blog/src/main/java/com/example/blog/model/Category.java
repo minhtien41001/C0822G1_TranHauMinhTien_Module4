@@ -10,7 +10,7 @@ public class Category {
     private int id;
     private String categoryName;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",cascade = CascadeType.ALL)
     private Set<Blog> blogs;
 
     public Category() {
