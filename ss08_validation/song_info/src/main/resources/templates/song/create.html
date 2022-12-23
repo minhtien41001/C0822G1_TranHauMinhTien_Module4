@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <title>Add new</title>
+    <style>
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        input:invalid {
+            border-color: red;
+        }
+        input:valid {
+            border-color: green;
+        }
+    </style>
+</head>
+<body>
+<div class="mx-5 px-5 pt-3">
+    <h2 class="text-center fw-bold">Add new</h2>
+
+    <p class="text-center">
+        <a href="/song"><i class="fa-solid fa-backward"></i> Back to list</a>
+    </p>
+
+
+    <div class="d-flex justify-content-center">
+
+        <form class="w-50 border border-2 border-success p-3 rounded" th:object="${songDto}" action="/song/save"
+              method="post">
+            <div class="form-group">
+                <label for="name" class="h6" >name:</label>
+                <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                <div class="input-group">
+                    <input type="text" id="name" class="form-control" placeholder="Input name" name="name"  th:field="*{name}">
+                    <span class="input-group-text"><i class="fa-solid fa-person-circle-question"></i></span>
+                </div>
+            </div>
+
+            <div class="mt-3 form-group">
+                <label for="singer" class="h6">singer:</label>
+                <p style="color: red" th:if="${#fields.hasErrors('singer')}" th:errors="*{singer}"></p>
+                <input type="text" id="singer" class="form-control" name="singer" th:field="*{singer}">
+            </div>
+
+
+            <div class="mt-3 form-group">
+                <label for="category" class="h6">category:</label>
+                <p style="color: red" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></p>
+                <div class="input-group">
+                    <input type="text" id="category" class="form-control" placeholder="Input category" name="category" th:field="*{category}">
+                    <span class="input-group-text"><i class="fa-solid fa-id-card"></i></span>
+                </div>
+            </div>
+
+            <div class="mt-3 form-group">
+                <label for="file" class="h6">file:</label>
+                <p style="color: red" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></p>
+                <div class="input-group">
+                    <input type="text" id="file" class="form-control" th:field="*{file}"  placeholder="Input file" name="file">
+                    <span class="input-group-text"><i class="fa-solid fa-square-phone"></i></span>
+                </div>
+            </div>
+
+            <div class="mt-3 text-center">
+                <button class="btn btn-info btn-outline-success btn-sm border border-2 border-success text-dark">
+                    -- Save <i class="fa-solid fa-floppy-disk"></i> --
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous"></script>
+</body>
+</html>
