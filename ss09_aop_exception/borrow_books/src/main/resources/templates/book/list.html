@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="notify" style="color: red">
+    <div th:if="mess">
+        <span th:text="${mess}"></span>
+    </div>
+</div>
+
+<h1>Trả sách:</h1>
+<form action="oder/resend" method="post">
+    <input type="text" name="pay">
+    <button type="submit">Pay</button>
+</form>
+
+<h1>Books</h1>
+
+<table>
+    <tr>
+        <th>STT</th>
+        <th>name</th>
+        <th>count</th>
+        <th>Oder</th>
+        <!--        <th>Edit</th>-->
+        <th>Delete</th>
+    </tr>
+    <th:block th:each="book, bookStat : ${books}">
+        <tr>
+            <td th:text="${bookStat.count}"></td>
+            <td th:text="${book.name}"></td>
+            <td th:text="${book.count}"></td>
+            <td><a th:href="@{oder/{id}/oder(id=${book.id})}">Oder</a></td>
+
+            <!--            <td><a th:href="@{/edit-book/__${book.id}__ }">Edit</a></td>-->
+            <td><a th:href="@{oder/delete-book/__${book.id}__ }">Delete</a></td>
+        </tr>
+    </th:block>
+</table>
+
+<div>
+    <a th:href="@{'/oder'(page=${books.number - 1})}"
+       th:if="${books.hasPrevious()}">Previous</a>
+
+    <span th:text="${books.number + 1}"></span>
+    <span th:text="${books.totalPages}"></span>
+
+    <a th:href="@{'/oder'(page = ${books.number + 1})}"
+       th:if="${books.hasNext()}">Next</a>
+</div>
+</body>
+</html>
