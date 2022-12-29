@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css">
+    <title>Facility list</title>
+    <link rel="stylesheet" href="datatables/css/dataTables.bootstrap4.min.css"/>
+    <style>
+        table {
+            border: solid 3px;
+        }
+        a {
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+<div class="p-3">
+    <h2 class="text-center fw-bold">FACILITY LIST</h2>
+
+    <p class="text-center mt-3"><a href="/"><i class="fa-solid fa-house-chimney h5 mx-1"></i> Back to HOME</a></p>
+
+    <nav class="navbar navbar-expand-lg py-0 my-0">
+        <div class="container-fluid">
+            <a href="/facility/create">
+                <button class="btn btn-success btn-outline-secondary btn-sm">
+                    <span class="fa-solid fa-house-medical text-light h5 my-auto me-1"></span>
+                    <span class="text-light"> Add new Facility</span>
+                </button>
+            </a>
+
+            <form class="d-flex my-2" role="search" action="/facility/list">
+                <input class="form-control me-2" type="text" placeholder="Input search name" th:value="${nameSearch}"
+                       aria-label="Search" name="nameSearch" style="width: 210%">
+                <input class="form-control me-2" type="text" placeholder="Input search FacilityType" th:value="${facilityType}"
+                       aria-label="Search" name="facilityTypeSearch" style="width: 210%">
+                <button class="btn btn-outline-success" type="submit" name="action" value="search">
+                    <i class="fa-solid fa-magnifying-glass"></i></button>
+            </form>
+        </div>
+    </nav>
+
+    <table id="facilityTable" class="table table-light table-striped table-bordered">
+        <thead>
+        <tr class="table-dark text-light">
+            <th>Id</th>
+            <th>Name</th>
+            <th>Area</th>
+            <th>Cost</th>
+            <th>Max people</th>
+            <th>Standard</th>
+            <th>Description</th>
+            <th>Pool area</th>
+            <th>Number of Floors</th>
+            <th>Facility Free</th>
+            <th>Rent type</th>
+            <th>Facility type</th>
+            <th class="text-center">Edit</th>
+            <th class="text-center">Delete</th>
+        </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="facility,index : ${listFacility}">
+                <td th:text="${facility.id}"></td>
+                <td th:text="${facility.name}"></td>
+                <td th:text="${facility.area}"></td>
+                <td th:text="${facility.cost}"></td>
+                <td th:text="${facility.maxPeople}"></td>
+                <td th:text="${facility.standardRoom}"></td>
+                <td th:text="${facility.descriptionOtherConvenience}"></td>
+                <td th:text="${facility.poolArea}"></td>
+                <td th:text="${facility.numberOfFloors}"></td>
+                <td th:text="${facility.facilityFree}"></td>
+                <td th:text="${facility.rentType.name}"></td>
+                <td th:text="${facility.facilityType.name}"></td>
+
+                <td class="text-center">
+                    <a th:href="@{/facility/edit/{id}(id=${facility.id})}">
+                        <button class="btn btn-primary btn-outline-secondary btn-sm">
+                            <span class="fa-solid fa-house-circle-exclamation text-light h6 m-auto px-2"></span>
+                        </button>
+                    </a>
+                </td>
+                <<td class="text-center">
+                <a data-bs-toggle="modal"
+                   data-bs-target="#deleteFacility"
+                   th:attr="onclick=|deleteFacility('${facility.getId()}','${facility.getName()}')|" >
+                    <button class="btn btn-danger btn-outline-secondary btn-sm">
+                        <span class="fa-solid fa-person-circle-minus text-light h6 m-auto px-2"></span>
+                    </button>
+                </a>
+            </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div style="text-align: center">
+
+        <a th:href="@{/facility/list/(page = ${listFacility.number -1 })}"
+           th:if="${listFacility.hasPrevious()}">Previous</a>
+        <span th:text="${listFacility.number+1}"></span>/
+        <span th:text="${listFacility.totalPages}"></span>
+        <a th:href="@{/facility/list/(page = ${listFacility.number +1})}"
+           th:if="${listFacility.hasNext()}">Next</a>
+    </div>
+
+    <div class="modal fade" id="deleteFacility" tabindex="-1" aria-labelledby="exampleModalLabel1"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modalCSS">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="exampleModalLabel1">Bạn có chắc chắn muốn xóa?</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <form th:action="@{/facility/delete}">
+                    <div class="modal-body">
+                        <span class="h6">Facility: </span><strong id="nameDelete" class="text-danger ps-2"></strong>
+                        <input type="hidden" name="idDelete" id="idDelete" readonly/>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger" value="delete">Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function deleteFacility(id, name) {
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
+    }
+</script>
+
+<script src="jquery/jquery-3.5.1.min.js"></script>
+<script src="datatables/js/jquery.dataTables.min.js"></script>
+<script src="datatables/js/dataTables.bootstrap4.min.js"></script>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa"
+        crossorigin="anonymous">
+</script>
+</html>
