@@ -5,6 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
@@ -23,14 +24,17 @@ public class CustomerDto implements Validator {
 
     @NotBlank(message = "CMND cannot be left blank")
     @Pattern(regexp = "^\\d{9}$",message = "CMND must be in the correct format")
+    @Column(unique = true)
     private String idCard;
 
     @NotBlank(message = "Phone Number cannot be left blank ")
     @Pattern(regexp = "[0-9]{10}",message = "Phone Number must be in the correct format")
+    @Column(unique = true)
     private String phoneNumber;
 
     @NotBlank(message = "Email cannot be left blank ")
     @Pattern(regexp = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$",message = "Email must be in the correct format")
+    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "Address cannot be left blank ")
