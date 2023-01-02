@@ -20,12 +20,15 @@ public class Employee {
 
     private String dateOfBirth;
 
+    @Column(unique = true)
     private String idCard;
 
     private String salary;
 
+    @Column(unique = true)
     private String phoneNumber;
 
+    @Column(unique = true)
     private String email;
 
     private String address;
