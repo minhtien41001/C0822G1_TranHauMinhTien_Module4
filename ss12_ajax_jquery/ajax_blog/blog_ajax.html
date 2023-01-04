@@ -26,7 +26,8 @@
 
     </tbody>
 </table>
-
+<a id="loadMore" class="btn btn-primary">Tải Thêm</a>
+</body>
 <button class="btn btn-outline-primary" type="button" id="more">Tải thêm </button>
 <button class="btn btn-outline-primary" type="button" id="less">Ít lại </button>
 
@@ -47,73 +48,20 @@
 
 
 <script>
-
-    $(document).ready(function () {
-        let page = 0
-        let totalPage
-
-        function checkPage() {
-            if (page === totalPage - 1) {
-                $("#more").hide()
-            } else {
-                $("#more").show()
-            }
-
-        }
-
-        $("#more").click(function () {
-            page = page + 1
-            if (page <= totalPage - 1) {
-                init();
-            }
-            checkPage()
-        })
-        $("#less").click(function () {
-            page = 0
-            $("#myBody").empty();
-            init()
-            checkPage()
-        })
-
-        function init() {
-            $.ajax({
-                url: 'http://localhost:8080/api/blogs',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data) {
-                    console.log(data)
-                    let myTable = "";
-                    for (let i = 0; i <data.length ; i++) {
-                        myTable +=
-                            `
-                            <tr>
-                              <th>${data[i].id}</th>
-                              <td>${data[i].title}</td>
-                              <td>${data[i].writer}</td>
-                              <td>${data[i].content}</td>
-                              <td>${data[i].dateCreated}</td>
-                              <td>${data[i].category.categoryName}</td>
-                            </tr>
-                            `
-                    }
-                    debugger
-                    $(".myBody").html(myTable);
-                }
-            })
-        }
-
-        init();
-
-    })
-    function search() {
-        let id = $("#search").val();
+    let page = 0;
+    $("#loadMore").click(function () {
+        page +=1;
         $.ajax({
-            url: 'http://localhost:8080/api/blogs/'+ id ,
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: 'http://localhost:8080/api/blogs?page='+ page,
             type: 'GET',
             dataType: 'json',
             success: function (data) {
-                console.log(data)
                 let myTable = "";
+                for (let i = 0; i < data.content.length; i++) {
                     myTable +=
                         `
                             <tr>
@@ -125,13 +73,78 @@
                               <td>${data[i].category.categoryName}</td>
                             </tr>
                             `
+                }
                 debugger
                 $("#myBody").html(myTable);
             }
         })
-    }
 
+    })
 
+    $("#search").click(function () {
+        let search = $("#titleSearch").val();
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            url: 'http://localhost:8080/api/blogs/search-by-title/'+search,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                let tableSearch = "";
+                for (let i = 0; i < data.content.length; i++) {
+                    tableSearch +=
+                        `
+                             <tr>
+                              <th>${data[i].id}</th>
+                              <td>${data[i].title}</td>
+                              <td>${data[i].writer}</td>
+                              <td>${data[i].content}</td>
+                              <td>${data[i].dateCreated}</td>
+                              <td>${data[i].category.categoryName}</td>
+                            </tr>
+                            `
+                }
+                debugger
+                $("#myBody").empty();
+                $("#myBody").html(tableSearch);
+            }
+        })
+        event.preventDefault();
+    })
+
+    $(document).ready(function () {
+        function init() {
+            $.ajax({
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                url: 'http://localhost:8080/api/blogs',
+                type: 'GET',
+                dataType: 'json',
+                success: function (data) {
+                    let myTable = "";
+                    for (let i = 0; i < data.content.length; i++) {
+                        myTable +=
+                            `
+                      <tr>
+                              <th>${data[i].id}</th>
+                              <td>${data[i].title}</td>
+                              <td>${data[i].writer}</td>
+                              <td>${data[i].content}</td>
+                              <td>${data[i].dateCreated}</td>
+                              <td>${data[i].category.categoryName}</td>
+                            </tr>
+                            `
+                    }
+                    debugger
+                    $("#myBody").append(myTable);
+                }
+            })
+        }
+        init();
+    })
 </script>
-</body>
 </html>

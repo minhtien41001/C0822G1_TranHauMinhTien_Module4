@@ -13,7 +13,7 @@ public interface IBlogService {
 
     void save(Blog blog);
 
-    Blog findById(int id);
+//    Blog findById(int id);
 
     void update(Blog blog);
 
@@ -22,6 +22,10 @@ public interface IBlogService {
     List<Blog> findAllList();
 
     List<Blog> searchByTitle(String title);
+
+    Page<Blog> findByCategory(Category category, Pageable pageable);
+
+    Optional findById(Integer id);
 
 }
 

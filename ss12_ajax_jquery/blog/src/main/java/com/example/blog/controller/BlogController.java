@@ -16,10 +16,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/blog")
 public class BlogController {
     @Autowired
-    IBlogService iBlogService;
+    private IBlogService iBlogService;
 
     @Autowired
-    ICategoryService iCategoryService;
+    private ICategoryService iCategoryService;
 
     @GetMapping("")
     public String showList(@PageableDefault(page = 0,size = 2)

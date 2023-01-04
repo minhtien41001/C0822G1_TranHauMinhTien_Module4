@@ -1,6 +1,7 @@
 package com.example.blog.controller;
 
 import com.example.blog.model.Blog;
+import com.example.blog.model.Category;
 import com.example.blog.service.IBlogService;
 import com.example.blog.service.ICategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,44 +20,46 @@ import java.util.Optional;
 @CrossOrigin("*")
 public class BlogRestController {
     @Autowired
-    IBlogService iBlogService;
+    private IBlogService blogService;
 
-    @Autowired
-    ICategoryService iCategoryService;
 
-    @GetMapping
-    public ResponseEntity<Page<Blog>> findAllBlog(@PageableDefault(value = 0, size = 5,sort = {"author"})Pageable pageable){
-        Page<Blog> blogList = iBlogService.findAll(pageable);
+    @GetMapping("")
+    public ResponseEntity<Iterable<Blog>> findAllBlog(@PageableDefault(page = 0,size = 3) Pageable pageable) {
+        Page<Blog> blogList =  blogService.findAll(pageable);
         if (blogList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(blogList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Blog> findById(@PathVariable ("id") int id){
-        Blog blog = iBlogService.findById(id);
-        if (blog == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+    @GetMapping("/find-by-category/{category}")
+    public ResponseEntity<Iterable<Blog>> findByCategory(@PathVariable("category") Category category, @PageableDefault(page = 0,size = 3) Pageable pageable){
+        Page<Blog> blogs = blogService.findByCategory(category,pageable);
+        if (blogs.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(blog,HttpStatus.OK);
+        return new ResponseEntity<>(blogs, HttpStatus.OK);
     }
 
-    @PostMapping("create")
-    public ResponseEntity<Blog> create(@RequestBody Blog blog){
-        iBlogService.save(blog);
-        Blog blog1 = iBlogService.findById(blog.getId());
-        return new ResponseEntity<>(blog1,HttpStatus.CREATED);
-    }
 
-    @DeleteMapping("{id}")
-    public ResponseEntity<Blog> delete(@PathVariable ("id") int id){
-        Blog blog = iBlogService.findById(id);
+    @GetMapping("/find-by-id/{id}")
+    public ResponseEntity findById(@PathVariable("id") int id){
+        Blog blog = (Blog) blogService.findById(id).get();
         if (blog == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        iBlogService.remove(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(blog, HttpStatus.OK);
     }
 
+
+    @GetMapping("/search-by-title/{titleSearch}")
+    public ResponseEntity findByName(@PathVariable("titleSearch") String title,
+                                     @PageableDefault(page = 0,size = 3) Pageable pageable){
+        List<Blog> blog = blogService.searchByTitle(title);
+        if (blog == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(blog, HttpStatus.OK);
+    }
 }

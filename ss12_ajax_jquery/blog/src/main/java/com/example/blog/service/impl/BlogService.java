@@ -1,6 +1,7 @@
 package com.example.blog.service.impl;
 
 import com.example.blog.model.Blog;
+import com.example.blog.model.Category;
 import com.example.blog.repository.IBlogRepository;
 import com.example.blog.service.IBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +26,10 @@ public class BlogService implements IBlogService {
         iBlogRepository.save(blog);
     }
 
-    @Override
-    public Blog findById(int id) {
-        return iBlogRepository.findById(id);
-    }
+//    @Override
+//    public Blog findById(int id) {
+//        return iBlogRepository.findById(id);
+//    }
 
     @Override
     public void update(Blog blog) {
@@ -48,6 +49,16 @@ public class BlogService implements IBlogService {
     @Override
     public List<Blog> searchByTitle(String title) {
         return iBlogRepository.findByTitleContaining(title);
+    }
+
+    @Override
+    public Page<Blog> findByCategory(Category category, Pageable pageable) {
+        return iBlogRepository.findByCategory(category,pageable);
+    }
+
+    @Override
+    public Optional findById(Integer id) {
+        return iBlogRepository.findById(id);
     }
 
 }
