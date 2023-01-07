@@ -1,5 +1,6 @@
 package com.example.casestudy.service.impl;
 
+import com.example.casestudy.dto.IContractDetailDto;
 import com.example.casestudy.model.contract.ContractDetail;
 import com.example.casestudy.repository.contract.IContractDetailRepository;
 import com.example.casestudy.service.IContractDetailService;
@@ -12,13 +13,19 @@ import java.util.Optional;
 public class ContractDetailService implements IContractDetailService {
     @Autowired
     IContractDetailRepository iContractDetailRepository;
+
     @Override
     public List<ContractDetail> findAll() {
         return iContractDetailRepository.findAll();
     }
 
     @Override
-    public Optional<ContractDetail> findById(int id) {
-        return iContractDetailRepository.findById(id);
+    public void save(ContractDetail contractDetail) {
+        iContractDetailRepository.save(contractDetail);
+    }
+
+    @Override
+    public List<IContractDetailDto> showAll(Integer id) {
+        return iContractDetailRepository.showAll(id);
     }
 }

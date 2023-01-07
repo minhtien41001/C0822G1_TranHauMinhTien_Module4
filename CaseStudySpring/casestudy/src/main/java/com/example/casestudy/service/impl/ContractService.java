@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class ContractService implements IContractService {
     @Autowired
-    IContractRepository iContractRepository;
+    private IContractRepository iContractRepository;
 
     @Override
     public void save(Contract contract) {
@@ -29,5 +29,10 @@ public class ContractService implements IContractService {
     @Override
     public Page<IContractDto> findAllDto(Pageable pageable) {
         return iContractRepository.findAllDto(pageable);
+    }
+
+    @Override
+    public List<Contract> findAll() {
+        return iContractRepository.findAll();
     }
 }

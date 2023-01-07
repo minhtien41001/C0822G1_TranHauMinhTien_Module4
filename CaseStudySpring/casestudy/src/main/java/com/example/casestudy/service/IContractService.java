@@ -14,4 +14,6 @@ public interface IContractService {
     List<IContractDto> findAllDto();
 
     Page<IContractDto> findAllDto(Pageable pageable);
+
+    List<Contract> findAll();
 }

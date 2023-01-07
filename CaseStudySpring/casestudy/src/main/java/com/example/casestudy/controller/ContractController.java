@@ -9,27 +9,28 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/contract")
 public class ContractController {
     @Autowired
-    IContractService iContractService;
+    private IContractService iContractService;
 
     @Autowired
-    IContractDetailService iContractDetailService;
+    private IContractDetailService iContractDetailService;
 
     @Autowired
-    IAttachFacilityService iAttachFacilityService;
+    private IAttachFacilityService iAttachFacilityService;
 
     @Autowired
-    ICustomerService iCustomerService;
+    private ICustomerService iCustomerService;
 
     @Autowired
-    IFacilityService iFacilityService;
+    private IFacilityService iFacilityService;
 
     @Autowired
-    IEmployeeService iEmployeeService;
+    private IEmployeeService iEmployeeService;
 
 
     @GetMapping("/list")
@@ -50,5 +51,20 @@ public class ContractController {
     public String saveContract(@ModelAttribute Contract contract){
         iContractService.save(contract);
         return "redirect:/contract/list";
+    }
+
+    @PostMapping("/add-contract-detail")
+    public String saveDetail(@ModelAttribute ContractDetail contractDetail, RedirectAttributes redirectAttributes) {
+        iContractDetailService.save(contractDetail);
+        redirectAttributes.addFlashAttribute("message", "Thêm mới hợp đồng chi tiết thành công!");
+
+        return "redirect:/contract";
+    }
+
+    @GetMapping("/{id}")
+    public String showAttachFacility(@PathVariable Integer id, Model model) {
+        model.addAttribute("contractDetails", iContractDetailService.showAll(id));
+
+        return "contract/attachFacilityList";
     }
 }

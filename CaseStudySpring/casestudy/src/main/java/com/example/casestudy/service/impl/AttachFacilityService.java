@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class AttachFacilityService implements IAttachFacilityService {
     @Autowired
-    IAttachFacilityRepository iAttachFacilityRepository;
+    private IAttachFacilityRepository iAttachFacilityRepository;
     @Override
     public List<AttachFacility> findAll() {
         return iAttachFacilityRepository.findAll();

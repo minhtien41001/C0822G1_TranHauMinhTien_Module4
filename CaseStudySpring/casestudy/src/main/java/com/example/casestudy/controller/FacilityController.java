@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/facility")
 public class FacilityController {
     @Autowired
-    IFacilityService iFacilityService;
+     private IFacilityService iFacilityService;
 
     @Autowired
-    IFacilityTypeService iFacilityTypeService;
+    private IFacilityTypeService iFacilityTypeService;
 
     @Autowired
-    IRentTypeService iRentTypeService;
+    private IRentTypeService iRentTypeService;
 
     @GetMapping("/list")
     public String showList(@PageableDefault(value = 5)Pageable pageable,

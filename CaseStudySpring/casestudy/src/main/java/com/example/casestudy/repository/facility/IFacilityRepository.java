@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IFacilityRepository extends JpaRepository<Facility,Integer> {
 
-    @Query(value = "select * " +
-            "from facility " +
-            "where facility.name like %:nameSearch%",
-            nativeQuery = true)
-
-    Page<Facility> searchFacility(@Param("nameSearch") String nameSearch, Pageable pageable);
+//    @Query(value = "select * " +
+//            "from facility " +
+//            "where facility.name like %:nameSearch%",
+//            nativeQuery = true)
+//
+//    Page<Facility> searchFacility(@Param("nameSearch") String nameSearch, Pageable pageable);
 
 
 

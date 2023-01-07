@@ -12,7 +12,7 @@ public interface IFacilityService {
 
     void save(Facility facility);
 
-    Page<Facility> searchFacility(String nameSearch, Pageable pageable);
+//    Page<Facility> searchFacility(String nameSearch, Pageable pageable);
 
     Page<Facility> searchFacility1(String nameSearch,String facilityType,Pageable pageable);
 

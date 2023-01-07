@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public class FacilityService implements IFacilityService {
     @Autowired
-    IFacilityRepository iFacilityRepository;
+    private IFacilityRepository iFacilityRepository;
     @Override
     public List<Facility> findAll() {
         return iFacilityRepository.findAll();
@@ -24,10 +24,10 @@ public class FacilityService implements IFacilityService {
         iFacilityRepository.save(facility);
     }
 
-    @Override
-    public Page<Facility> searchFacility(String nameSearch, Pageable pageable) {
-        return iFacilityRepository.searchFacility(nameSearch,pageable);
-    }
+//    @Override
+//    public Page<Facility> searchFacility(String nameSearch, Pageable pageable) {
+//        return iFacilityRepository.searchFacility(nameSearch,pageable);
+//    }
 
     @Override
     public Page<Facility> searchFacility1(String nameSearch, String facilityType, Pageable pageable) {
