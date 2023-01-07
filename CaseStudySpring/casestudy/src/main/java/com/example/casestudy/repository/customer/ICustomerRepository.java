@@ -11,7 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ICustomerRepository extends JpaRepository<Customer,Integer> {
     @Query(value = "select * from customer where name like %:nameSearch%  " +
-            "and email like %:emailSearch% and customer_type_id like  %:customerType%"
+            "and email like %:emailSearch% and customer_type_id =  :customerType"
 //            ,
 //            countQuery = "select * from customer where name like %:nameSearch%  " +
 //                    "and email like %:emailSearch% and customer_type_id like  %:customerType%"

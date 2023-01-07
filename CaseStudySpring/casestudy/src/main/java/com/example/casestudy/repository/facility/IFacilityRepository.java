@@ -22,7 +22,7 @@ public interface IFacilityRepository extends JpaRepository<Facility,Integer> {
 
     @Query(value = "select * " +
             "from facility " +
-            "where name like %:nameSearch% and facility_type_id like %:facilityType%"
+            "where name like %:nameSearch% and facility_type_id = :facilityType"
             ,nativeQuery = true)
 
     Page<Facility> searchFacility1(@Param("nameSearch") String nameSearch,
