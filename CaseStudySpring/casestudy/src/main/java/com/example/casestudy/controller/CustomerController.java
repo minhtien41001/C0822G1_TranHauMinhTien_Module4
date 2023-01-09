@@ -13,6 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/customer")
@@ -41,20 +44,29 @@ public class CustomerController {
     public String createCustomer(Model model){
         model.addAttribute("customerDto",new CustomerDto());
         model.addAttribute("listCustomerType",iCustomerTypeService.findAll());
+        model.addAttribute("customerDto", new CustomerDto());
         return "customer/create";
     }
 
     @PostMapping("/save")
     public String saveCustomer(@Validated @ModelAttribute CustomerDto customerDto,
-                               BindingResult bindingResult){
-        if (bindingResult.hasErrors()){
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+        List<Customer> listCustomer = iCustomerService.findAll();
+        if (bindingResult.hasErrors()) {
             return "customer/create";
-        }else {
-            Customer customer = new Customer();
-            BeanUtils.copyProperties(customerDto,customer);
-            iCustomerService.save(customer);
-            return "redirect:/customer/list";
+        } else {
+            for (Customer customer1 : listCustomer) {
+                if (customerDto.getEmail().equals(customer1.getEmail()) || customerDto.getIdCard().equals(customer1.getIdCard()) || customerDto.getPhoneNumber().equals(customer1.getPhoneNumber())) {
+                    redirectAttributes.addFlashAttribute("mess", "Khách hàng đã tồn tại !");
+                }else {
+                    Customer customer = new Customer();
+                    BeanUtils.copyProperties(customerDto, customer);
+                    iCustomerService.save(customer);
+                }
+                break;
+            }
         }
+        return "redirect:/customer/list";
     }
 
     @GetMapping("/edit/{id}")

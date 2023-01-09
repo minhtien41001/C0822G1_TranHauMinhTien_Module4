@@ -1,6 +1,7 @@
 package com.example.casestudy.controller;
 
 import com.example.casestudy.dto.FacilityDto;
+import com.example.casestudy.model.customer.Customer;
 import com.example.casestudy.model.facility.Facility;
 import com.example.casestudy.service.IFacilityService;
 import com.example.casestudy.service.IFacilityTypeService;
@@ -14,6 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/facility")
@@ -50,15 +54,23 @@ public class FacilityController {
 
     @PostMapping("/save")
     public String saveFacility(@Validated @ModelAttribute FacilityDto facilityDto,
-                               BindingResult bindingResult){
+                               BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        List<Facility> listFacility = iFacilityService.findAll();
         if (bindingResult.hasFieldErrors()){
             return "facility/create";
         }else {
-            Facility facility = new Facility();
-            BeanUtils.copyProperties(facilityDto,facility);
-            iFacilityService.save(facility);
-            return "redirect:/facility/list";
+            for (Facility facility1 :listFacility){
+                if (facilityDto.getName().equals(facility1.getName())){
+                    redirectAttributes.addFlashAttribute("mess", " đã tồn tại !");
+                }else {
+                    Facility facility = new Facility();
+                    BeanUtils.copyProperties(facilityDto,facility);
+                    iFacilityService.save(facility);
+                }
+                break;
+            }
         }
+        return "redirect:/facility/list";
     }
 
     @GetMapping("/edit/{id}")
