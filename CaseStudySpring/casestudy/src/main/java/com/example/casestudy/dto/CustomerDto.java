@@ -34,7 +34,6 @@ public class CustomerDto implements Validator {
 
     @NotBlank(message = "Email cannot be left blank ")
     @Pattern(regexp = "^[\\w-.]+@([\\w-]+\\.)+[\\w-]{2,4}$",message = "Email must be in the correct format")
-    @Column(unique = true)
     private String email;
 
     @NotBlank(message = "Address cannot be left blank ")
